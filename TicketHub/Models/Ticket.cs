@@ -4,6 +4,8 @@ namespace TicketHub.Models
 {
     public class Ticket
     {
+        // I took the validation tags from Paul with his permission
+
         [Required(ErrorMessage = "Concert ID cannot be empty.")]
         public int concertId { get; set; }
 
@@ -51,7 +53,7 @@ namespace TicketHub.Models
         [Required(ErrorMessage = "Province cannot be empty.")]
         public String Province { get; set; } = String.Empty;
 
-        [Required(ErrorMessage = "Postal Code is required.")] //I got this regex from the internet, found a great resource at https://regex101.com/
+        [Required(ErrorMessage = "Postal Code is required.")]
         [RegularExpression(@"(^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$)|(^\d{5}(-\d{4})?$)", ErrorMessage = "Postal Code must be a valid Canadian or US postal code.")]
         public String PostalCode { get; set; } = String.Empty;
 
