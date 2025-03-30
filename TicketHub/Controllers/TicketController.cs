@@ -38,7 +38,7 @@ namespace TicketHub.Controllers
             }
 
             // Fetch Azure storage connection string from the configuration
-            string queueName = "ticket-queue";
+            string queueName = "tickethub";
             string? storageConnectionString = _configuration["AzureStorageConnectionString"];
 
             // Check if the connection string is missing or empty
