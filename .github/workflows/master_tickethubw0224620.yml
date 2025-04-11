@@ -63,6 +63,13 @@ jobs:
           slot-name: 'Production'
           package: .
 
+      - name: Check current directory
+        run: pwd
+      
+      - name: List directory contents
+        run: ls -R
+
+
       - name: Publish function app
         run: dotnet publish ./FunctionApp/FunctionApp1/FunctionApp1.csproj -c Release -o functionapp_output
 
