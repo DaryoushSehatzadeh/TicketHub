@@ -33,6 +33,34 @@ namespace FunctionApp1
             {
                 await conn.OpenAsync(); // Note the ASYNC
 
+                // Check if the table exists, if not, create it
+                var checkTableQuery = @"
+                    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'ConcertOrders')
+                    BEGIN
+                        CREATE TABLE dbo.ConcertOrders
+                        (
+                            ConcertId INT PRIMARY KEY,
+                            Email NVARCHAR(255),
+                            Name NVARCHAR(255),
+                            Phone NVARCHAR(15),
+                            Quantity INT,
+                            CreditCard NVARCHAR(16),
+                            Expiration DATE,
+                            SecurityCode NVARCHAR(4),
+                            Address NVARCHAR(255),
+                            City NVARCHAR(100),
+                            Province NVARCHAR(100),
+                            PostalCode NVARCHAR(10),
+                            Country NVARCHAR(100)
+                        )
+                    END";
+
+
+                using (SqlCommand checkTableCmd = new SqlCommand(checkTableQuery, conn))
+                {
+                    await checkTableCmd.ExecuteNonQueryAsync();
+                }
+
                 var query = @"
                     INSERT INTO dbo.ConcertOrders 
                     (
