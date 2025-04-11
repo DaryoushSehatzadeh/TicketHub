@@ -16,6 +16,12 @@ jobs:
       contents: read #This is required for actions/checkout
 
     steps:
+      - name: List directory contents
+        run: |
+            ls -R
+
+
+    
       - uses: actions/checkout@v4
 
       - name: Set up .NET Core
