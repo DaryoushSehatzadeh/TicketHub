@@ -28,7 +28,7 @@ namespace TicketHub.Controllers
         }
 
         // POST method to accept a Ticket and push it to Azure Queue
-        [HttpPost]
+        [HttpPost("newticket")]
         public async Task<IActionResult> CreateTicket(Ticket ticket)
         {
             // Validate the ticket model
