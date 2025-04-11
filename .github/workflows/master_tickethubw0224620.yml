@@ -64,7 +64,7 @@ jobs:
           package: .
 
       - name: Publish function app
-        run: dotnet publish FunctionApp/FunctionApp1/FunctionApp1.csproj -c Release -o functionapp_output
+        run: dotnet publish ./FunctionApp/FunctionApp1/FunctionApp1.csproj -c Release -o functionapp_output
 
       - name: Deploy to Azure Function App
         uses: Azure/functions-action@v1
