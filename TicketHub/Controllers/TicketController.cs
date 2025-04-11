@@ -56,7 +56,8 @@ namespace TicketHub.Controllers
                 string ticketMessage = JsonSerializer.Serialize(ticket);
 
                 // Enqueue the message to Azure Queue
-                await queueClient.SendMessageAsync(ticketMessage);
+                var encodedMessage = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(ticketMessage));
+                await queueClient.SendMessageAsync(encodedMessage);
 
                 // Return a success response with the ticket
                 return CreatedAtAction(nameof(CreateTicket), new { id = ticket.concertId }, ticket);
