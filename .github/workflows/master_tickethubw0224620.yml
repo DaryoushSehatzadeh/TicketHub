@@ -31,7 +31,7 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
+          
       - name: Publish Azure Function App
         run: dotnet publish ./FunctionApp/FunctionApp1/FunctionApp1.csproj -c Release -o functionapp_output
 
