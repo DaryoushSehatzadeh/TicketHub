@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - tickethubw0224620
 
 on:
@@ -13,7 +10,7 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -23,17 +20,26 @@ jobs:
         with:
           dotnet-version: '9.x'
 
-      - name: Build with dotnet
+      - name: Build everything
         run: dotnet build --configuration Release
 
-      - name: dotnet publish
+      - name: Publish ASP.NET Web App
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
-      - name: Upload artifact for deployment job
+      - name: Upload Web App artifact
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+          
+      - name: Publish Azure Function App
+        run: dotnet publish ./FunctionApp/FunctionApp1/FunctionApp1.csproj -c Release -o functionapp_output
+
+      - name: Upload Function App artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: functionapp
+          path: functionapp_output
 
   deploy:
     runs-on: windows-latest
@@ -42,15 +48,22 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download Web App artifact
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+          path: webapp_output
+
+      - name: Download Function App artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: functionapp
+          path: functionapp_output
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -64,15 +77,12 @@ jobs:
         with:
           app-name: 'tickethubw0224620'
           slot-name: 'Production'
-          package: .
-
-      - name: Build Function App
-        run: dotnet publish ./FunctionApp/FunctionApp1/FunctionApp1.csproj -c Release -o functionapp_output
+          package: webapp_output
 
       - name: Deploy to Azure Function App
         uses: Azure/functions-action@v1
         with:
-          app-name: 'nscc-w0224620-functionapp'
+          app-name: 'functionappw0224620'
           package: functionapp_output
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           scm-do-build-during-deployment: true
