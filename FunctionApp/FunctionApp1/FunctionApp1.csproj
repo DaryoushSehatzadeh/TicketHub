@@ -28,5 +28,7 @@
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
 		</None>
 	</ItemGroup>
-
+	<Import Project="Sdk.targets" />
 </Project>
+
+
